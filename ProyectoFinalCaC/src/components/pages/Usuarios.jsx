@@ -172,19 +172,6 @@ const UserForm = () => {
                 <button type="submit" className="btn btn-primary">Registrar</button>
             </form>
 
-            <h2>Iniciar Sesión</h2>
-            <form onSubmit={handleSubmitLogin}>
-                <div className="mb-3">
-                    <label className="form-label">Email:</label>
-                    <input type="email" className="form-control" value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} />
-                </div>
-                <div className="mb-3">
-                    <label className="form-label">Contraseña:</label>
-                    <input type="password" className="form-control" value={loginContraseña} onChange={(e) => setLoginContraseña(e.target.value)} />
-                </div>
-                <button type="submit" className="btn btn-primary">Iniciar Sesión</button>
-            </form>
-
             <h2>Usuarios Registrados</h2>
             <table className="table">
                 <thead>
