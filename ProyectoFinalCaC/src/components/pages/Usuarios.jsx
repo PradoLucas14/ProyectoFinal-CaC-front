@@ -10,9 +10,6 @@ const UserForm = () => {
     const [contraseñaRegistro, setContraseñaRegistro] = useState('');
     const [nombreEdicion, setNombreEdicion] = useState('');
     const [emailEdicion, setEmailEdicion] = useState('');
-    const [contraseñaEdicion, setContraseñaEdicion] = useState('');
-    const [loginEmail, setLoginEmail] = useState('');
-    const [loginContraseña, setLoginContraseña] = useState('');
     const [usuarios, setUsuarios] = useState([]);
     const [modalShow, setModalShow] = useState(false);
     const [usuarioEditando, setUsuarioEditando] = useState(null);
@@ -63,42 +60,19 @@ const UserForm = () => {
         }
     };
 
-    const handleSubmitLogin = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await axios.post('http://localhost:4000/login', {
-                email: loginEmail,
-                contraseña: loginContraseña
-            });
-            Swal.fire({
-                icon: 'success',
-                title: 'Inicio de sesión exitoso',
-                showConfirmButton: false,
-                timer: 1500
-            });
-        } catch (error) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error al iniciar sesión',
-                text: error.response.data.error
-            });
-        }
-    };
-
     const handleEditarUsuario = (usuario) => {
         setUsuarioEditando(usuario);
         setNombreEdicion(usuario.nombre);
         setEmailEdicion(usuario.email);
-        setContraseñaEdicion(usuario.contraseña);
         setModalShow(true);
     };
 
-    const handleGuardarEdicion = async () => {
+    const handleGuardarEdicion = async (e) => {
+        e.preventDefault();
         try {
             const response = await axios.patch(`http://localhost:4000/usuarios/${usuarioEditando.id}`, {
                 nombre: nombreEdicion,
-                email: emailEdicion,
-                contraseña: contraseñaEdicion
+                email: emailEdicion
             });
             Swal.fire({
                 icon: 'success',
@@ -129,14 +103,14 @@ const UserForm = () => {
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-                eliminarUsuario(usuario);
+                eliminarUsuario(usuario.id);
             }
         });
     };
 
-    const eliminarUsuario = async (usuario) => {
+    const eliminarUsuario = async (id) => {
         try {
-            const response = await axios.delete(`http://localhost:4000/usuarios/${usuario.id}`);
+            const response = await axios.delete(`http://localhost:4000/usuarios/${id}`);
             Swal.fire({
                 icon: 'success',
                 title: 'Usuario eliminado correctamente',
@@ -199,37 +173,29 @@ const UserForm = () => {
 
             {/* Modal para editar usuario */}
             <Modal show={modalShow} onHide={() => setModalShow(false)} size="md" centered>
-                {usuarioEditando && (
-                    <Modal.Dialog>
-                        <Modal.Header closeButton>
-                            <Modal.Title>Editar Usuario</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            <form onSubmit={handleGuardarEdicion}>
-                                <div className="mb-3">
-                                    <label className="form-label">Nombre:</label>
-                                    <input type="text" className="form-control" value={nombreEdicion} onChange={(e) => setNombreEdicion(e.target.value)} />
-                                </div>
-                                <div className="mb-3">
-                                    <label className="form-label">Email:</label>
-                                    <input type="email" className="form-control" value={emailEdicion} onChange={(e) => setEmailEdicion(e.target.value)} />
-                                </div>
-                                <div className="mb-3">
-                                    <label className="form-label">Contraseña:</label>
-                                    <input type="password" className="form-control" value={contraseñaEdicion} onChange={(e) => setContraseñaEdicion(e.target.value)} />
-                                </div>
-                                <div className="modal-footer">
-                                    <Button variant="secondary" onClick={() => setModalShow(false)}>
-                                        Cancelar
-                                    </Button>
-                                    <Button variant="primary" type="submit">
-                                        Guardar Cambios
-                                    </Button>
-                                </div>
-                            </form>
-                        </Modal.Body>
-                    </Modal.Dialog>
-                )}
+                <Modal.Header closeButton>
+                    <Modal.Title>Editar Usuario</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <form onSubmit={handleGuardarEdicion}>
+                        <div className="mb-3">
+                            <label className="form-label">Nombre:</label>
+                            <input type="text" className="form-control" value={nombreEdicion} onChange={(e) => setNombreEdicion(e.target.value)} />
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label">Email:</label>
+                            <input type="email" className="form-control" value={emailEdicion} onChange={(e) => setEmailEdicion(e.target.value)} />
+                        </div>
+                        <div className="modal-footer">
+                            <Button variant="secondary" onClick={() => setModalShow(false)}>
+                                Cancelar
+                            </Button>
+                            <Button variant="primary" type="submit">
+                                Guardar Cambios
+                            </Button>
+                        </div>
+                    </form>
+                </Modal.Body>
             </Modal>
 
         </div>
