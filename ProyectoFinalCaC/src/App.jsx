@@ -7,7 +7,7 @@ import './App.css'; // Puedes usar este archivo para estilos personalizados si e
 const App = () => {
   return (
     <div>
-      <nav className="navbar navbar-expand-lg navbar-light bg-light">
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <a className="navbar-brand" href="#">Mi Aplicación</a>
         <div className="collapse navbar-collapse">
           <ul className="navbar-nav mr-auto">
